@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "electron-react-boilerplate",
-  "version": "0.18.1",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "log4j-electron-audit-catalog",
+  "productName": "log4j-electron-audit-catalog",
+  "version": "0.0.1",
+  "description": "Log4j Electron Audit Catalog application",
   "main": "./main.prod.js",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "name": "Log4j Electron Audit Catalog Maintainers",
+    "email": "alfredfox@gmail.com, moe.lubovac@gmail.com",
     "url": "https://github.com/electron-react-boilerplate"
   },
   "scripts": {
