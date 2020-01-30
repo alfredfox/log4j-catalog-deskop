@@ -35,6 +35,13 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
+const initialAuthDetailsState = {
+  accessToken: '',
+  catalogPath: 'audit-service-api/src/main/resources/catalog.json',
+  repository: 'logging-log4j-audit-sample',
+  username: '',
+}
+
 const initialErrorState = {
   accessToken: false,
   catalogPath: false,
@@ -63,7 +70,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [authDetails, setAuthDetails] = useState({});
+  const [authDetails, setAuthDetails] = useState(initialAuthDetailsState);
   const [errors, setErrors] = useState(initialErrorState);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -105,18 +112,16 @@ export default function App() {
         }
       )
       .then(({ data }) => {
-        const { products, categories, events, attributes } = JSON.parse(
-          atob(data.content)
-        );
+        const { attributes, categories, events, products } = JSON.parse(atob(data.content).replace(/\/\*((.|\n)*)\*\//, ''));
 
         dispatch({
           type: actionTypes.GET_CATALOG,
           payload: {
-            sha: data.sha,
-            products,
+            attributes,
             categories,
             events,
-            attributes
+            products,
+            sha: data.sha,
           }
         });
         setIsAuthenticated(true);
@@ -198,55 +203,54 @@ export default function App() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="catalogPath"
               error={errors.catalogPath}
+              fullWidth
               helperText={errors.catalogPath && "Please enter the path to your catalog.json file in your repository."}
               label="Catalog Path (E.g. audit-service-api/src/main/resources/catalog.json)"
-              fullWidth
+              name="catalogPath"
+              onChange={handleInputChange}
               size="small"
-              variant="outlined"
               value={authDetails?.catalogPath || ''}
-              onChange={handleInputChange}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="repository"
-              label="Repository (E.g. logging-log4j-audit-sample)"
               error={errors.repository}
+              fullWidth
               helperText={errors.repository && "Please enter the name of your repository."}
-              fullWidth
+              label="Repository (E.g. logging-log4j-audit-sample)"
+              name="repository"
+              onChange={handleInputChange}
               size="small"
-              variant="outlined"
               value={authDetails?.repository || ''}
-              onChange={handleInputChange}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="username"
-              label="Username"
               error={errors.username}
-              helperText={errors.username && "Please enter your username."}
               fullWidth
-              size="small"
-              variant="outlined"
-              value={authDetails?.username || ''}
+              helperText={errors.username && "Please enter your username."}
+              label="Username"
+              name="username"
               onChange={handleInputChange}
+              value={authDetails?.username || ''}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="accessToken"
-              label="Password or AccessToken"
               error={errors.accessToken}
-              helperText={errors.accessToken && "Please enter your password or access token."}
               fullWidth
-              type="password"
-              size="small"
-              variant="outlined"
-              value={authDetails?.accessToken || ''}
+              helperText={errors.accessToken && "Please enter your password or access token."}
+              label="Password or AccessToken"
+              name="accessToken"
               onChange={handleInputChange}
+              size="small"
+              type="password"
+              value={authDetails?.accessToken || ''}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
